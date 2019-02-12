@@ -1,8 +1,15 @@
 import os
 import numpy as np
+import zipfile
 
-def read(file_name):
-    path = os.path.join('data', file_name)
+def zip_code(OUTPUT_FOLDER):
+    zipf = zipfile.ZipFile(os.path.join(OUTPUT_FOLDER, 'source.zip'), 'w', zipfile.ZIP_DEFLATED)
+    zipf.write('main.py')
+    zipf.close()
+
+
+def read(INPUT_FOLDER, file_name):
+    path = os.path.join('input', file_name)
     with open(path, 'r') as f:
         R, C, L, H = map(int, next(f).split())
 
@@ -25,7 +32,8 @@ def write(path, solution):
 if __name__ == '__main__':
     INPUT_FOLDER = 'input'
     OUTPUT_FOLDER = 'output'
+    zip_code(OUTPUT_FOLDER)
     files = os.listdir(INPUT_FOLDER)
     for file in files:
-        R, C, L, H, lines = read(file)
+        R, C, L, H, lines = read(INPUT_FOLDER, file)
         write(os.path.join(OUTPUT_FOLDER, file), [[0, 0, R, C]])
