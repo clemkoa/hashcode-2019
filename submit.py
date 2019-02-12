@@ -41,7 +41,15 @@ def get_scores(submissions):
     response = requests.get('https://hashcode-judge.appspot.com/api/judge/v1/submissions/5720363694555136', headers=get_headers()).json()
     for item in response['items']:
         if item['id'] in submissions.values():
-            print(response['items'][item])
+            if not item['scored']:
+                print('Solution for "{}" still not scored'.format(item['dataSet']['name']))
+            else:
+                if item['valid']:
+                    print('Solution for "{}" got {}{}'.format(item['dataSet']['name'], item['score'], ' - new record!' if item['best'] else ''))
+                else:
+                    print('Solution for "{}" not valid: {}'.format(item['dataSet']['name'], item['errorMessage']))
+
+            print('')
 
 def submit():
     # Checks
@@ -59,7 +67,7 @@ def submit():
         else:
             print('Skipping missing input: "{}"'.format(utils.SOLUTION_INPUTS[dataset_id]))
 
-    time.sleep(5)
+    time.sleep(2)
     get_scores(submissions)
 
 if __name__ == '__main__':
