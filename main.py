@@ -7,7 +7,6 @@ def zip_code(OUTPUT_FOLDER):
     zipf.write('main.py')
     zipf.close()
 
-
 def read(INPUT_FOLDER, file_name):
     path = os.path.join('input', file_name)
     with open(path, 'r') as f:
@@ -36,4 +35,4 @@ if __name__ == '__main__':
     files = os.listdir(INPUT_FOLDER)
     for file in files:
         R, C, L, H, lines = read(INPUT_FOLDER, file)
-        write(os.path.join(OUTPUT_FOLDER, file), [[0, 0, R, C]])
+        write(os.path.join(OUTPUT_FOLDER, file), [[0, 0, 0, H-1]])
