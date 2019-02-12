@@ -1,6 +1,8 @@
+import os
 import requests
 import urllib.parse
 
+TOKEN_FILE = 'token.txt'
 SOURCE_INPUT = 'output/source.zip'
 SOLUTION_INPUTS = {
     '6140197687263232': 'output/a_example.in',
@@ -10,14 +12,17 @@ SOLUTION_INPUTS = {
 }
 
 def get_headers():
-    with open('token.txt', 'r') as f:
+    with open(TOKEN_FILE, 'r') as f:
         return {
             'Authorization': 'Bearer {}'.format(f.read().replace('\n', ''))
         }
 
 def get_upload_url():
-    response = requests.get('https://hashcode-judge.appspot.com/api/judge/v1/upload/createUrl', headers=get_headers()).json()
-    return response['value'] # Return upload URL
+    try :
+        response = requests.get('https://hashcode-judge.appspot.com/api/judge/v1/upload/createUrl', headers=get_headers()).json()
+        return response['value'] # Return upload URL
+    except KeyError:
+        raise Exception('Failed to get upload url - received: {}'.format(response))
 
 def upload_file(filename):
     upload_url = get_upload_url()
@@ -39,8 +44,17 @@ def submit_file(dataset_id, solution_filename, source_filename):
     print('Submitted solution for "{}"'.format(response['dataSet']['name']))
 
 def submit():
+    # Checks
+    if not os.path.exists(TOKEN_FILE):
+        raise Exception('Token file is missing: "{}"'.format(TOKEN_FILE))
+    if not os.path.exists(SOURCE_INPUT):
+        raise Exception('Source code is missing: "{}"'.format(SOURCE_INPUT))
+
     for dataset_id in SOLUTION_INPUTS:
-        submit_file(dataset_id, SOLUTION_INPUTS[dataset_id], SOURCE_INPUT)
+        if os.path.exists(SOLUTION_INPUTS[dataset_id]):
+            submit_file(dataset_id, SOLUTION_INPUTS[dataset_id], SOURCE_INPUT)
+        else:
+            print('Skipping missing input: "{}"'.format(SOLUTION_INPUTS[dataset_id]))
 
 if __name__ == '__main__':
     submit()
