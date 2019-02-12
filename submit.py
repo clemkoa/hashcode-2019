@@ -2,17 +2,10 @@ import os
 import requests
 import urllib.parse
 
-TOKEN_FILE = 'token.txt'
-SOURCE_INPUT = 'output/source.zip'
-SOLUTION_INPUTS = {
-    '6140197687263232': 'output/a_example.in',
-    '6571563717492736': 'output/b_small.in',
-    '5024167346831360': 'output/c_medium.in',
-    '6561530623557632': 'output/d_big.in'
-}
+import utils
 
 def get_headers():
-    with open(TOKEN_FILE, 'r') as f:
+    with open(utils.TOKEN_FILE, 'r') as f:
         return {
             'Authorization': 'Bearer {}'.format(f.read().replace('\n', ''))
         }
@@ -45,16 +38,16 @@ def submit_file(dataset_id, solution_filename, source_filename):
 
 def submit():
     # Checks
-    if not os.path.exists(TOKEN_FILE):
-        raise Exception('Token file is missing: "{}"'.format(TOKEN_FILE))
-    if not os.path.exists(SOURCE_INPUT):
-        raise Exception('Source code is missing: "{}"'.format(SOURCE_INPUT))
+    if not os.path.exists(utils.TOKEN_FILE):
+        raise Exception('Token file is missing: "{}"'.format(utils.TOKEN_FILE))
+    if not os.path.exists(utils.SOURCE_INPUT):
+        raise Exception('Source code is missing: "{}"'.format(utils.SOURCE_INPUT))
 
-    for dataset_id in SOLUTION_INPUTS:
-        if os.path.exists(SOLUTION_INPUTS[dataset_id]):
-            submit_file(dataset_id, SOLUTION_INPUTS[dataset_id], SOURCE_INPUT)
+    for dataset_id in utils.SOLUTION_INPUTS:
+        if os.path.exists(utils.SOLUTION_INPUTS[dataset_id]):
+            submit_file(dataset_id, utils.SOLUTION_INPUTS[dataset_id], utils.SOURCE_INPUT)
         else:
-            print('Skipping missing input: "{}"'.format(SOLUTION_INPUTS[dataset_id]))
+            print('Skipping missing input: "{}"'.format(utils.SOLUTION_INPUTS[dataset_id]))
 
 if __name__ == '__main__':
     submit()
