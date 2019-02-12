@@ -28,11 +28,32 @@ def write(path, solution):
         for rect in solution:
             f.write(' '.join(map(str, rect)) + '\n')
 
+def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
+    slice = pizza[xmin:xmax + 1, ymin:ymax + 1]
+    if xmax >= R - 1: return False
+    if ymax >= C - 1: return False
+    if 2 in slice: return False
+    if np.sum(slice) >= L and slice.size - np.sum(slice) >= L and slice.size <= H:
+        return True
+    return False
+
+def build_solution(R, C, L, H, lines):
+    solution = []
+    for i in range(R):
+        for j in range(C):
+            if is_slice_valid(lines, i, j, i + H - 1, j, R, C, L, H):
+                solution.append([i, j, i + H - 1, j])
+                lines[i:i+H, j:j+1] = 2
+    return solution
+
 if __name__ == '__main__':
     INPUT_FOLDER = 'input'
     OUTPUT_FOLDER = 'output'
     zip_code(OUTPUT_FOLDER)
-    files = os.listdir(INPUT_FOLDER)
+    files = sorted(os.listdir(INPUT_FOLDER))
     for file in files:
+        print(file)
         R, C, L, H, lines = read(INPUT_FOLDER, file)
-        write(os.path.join(OUTPUT_FOLDER, file), [[0, 0, 0, H-1]])
+        solution = build_solution(R, C, L, H, lines)
+        print(solution)
+        write(os.path.join(OUTPUT_FOLDER, file), solution)
