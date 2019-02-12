@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 import urllib.parse
 
 import utils
@@ -34,7 +35,13 @@ def submit_file(dataset_id, solution_filename, source_filename):
         })
     )
     response = requests.post(submit_url, headers=get_headers()).json()
-    print('Submitted solution for "{}"'.format(response['dataSet']['name']))
+    return response['id']
+
+def get_scores(submissions):
+    response = requests.get('https://hashcode-judge.appspot.com/api/judge/v1/submissions/5720363694555136', headers=get_headers()).json()
+    for item in response['items']:
+        if item['id'] in submissions.values():
+            print(response['items'][item])
 
 def submit():
     # Checks
@@ -43,11 +50,17 @@ def submit():
     if not os.path.exists(utils.SOURCE_INPUT):
         raise Exception('Source code is missing: "{}"'.format(utils.SOURCE_INPUT))
 
+    submissions = {}
     for dataset_id in utils.SOLUTION_INPUTS:
         if os.path.exists(utils.SOLUTION_INPUTS[dataset_id]):
-            submit_file(dataset_id, utils.SOLUTION_INPUTS[dataset_id], utils.SOURCE_INPUT)
+            submission_id = submit_file(dataset_id, utils.SOLUTION_INPUTS[dataset_id], utils.SOURCE_INPUT)
+            submissions[dataset_id] = submission_id
+            print('Submitted solution for "{}"'.format(utils.SOLUTION_INPUTS[dataset_id]))
         else:
             print('Skipping missing input: "{}"'.format(utils.SOLUTION_INPUTS[dataset_id]))
+
+    time.sleep(5)
+    get_scores(submissions)
 
 if __name__ == '__main__':
     submit()
