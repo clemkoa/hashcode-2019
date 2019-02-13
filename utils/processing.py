@@ -5,6 +5,14 @@ import numpy as np
     Contains problem-specific logic for reading the input and writing the output
 """
 
+# List of problem-specific input filenames, and associated dataset ID
+INPUT_FILENAMES = {
+    'a_example.in': '6140197687263232',
+    'b_small.in': '6571563717492736',
+    'c_medium.in': '5024167346831360',
+    'd_big.in': '6561530623557632'
+}
+
 def read_input(filename):
     """
         Example input reader for the 'Pizza' problem.

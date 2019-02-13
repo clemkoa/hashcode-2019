@@ -7,19 +7,16 @@ import zipfile
 from utils import processing
 from utils import submit
 
+"""
+
+"""
+
 ### Constants ###
 INPUT_FOLDER = 'input'
 OUTPUT_FOLDER = 'output'
 
 TOKEN_FILE = 'token.txt'
 SOURCE_CODE_FILENAME = '{}/source.zip'.format(OUTPUT_FOLDER)
-# Mapping of input filename to dataset ID
-INPUT_FILENAMES = {
-    'a_example.in': '6140197687263232',
-    'b_small.in': '6571563717492736',
-    'c_medium.in': '5024167346831360',
-    'd_big.in': '6561530623557632'
-}
 
 def pretty_print_time(t):
     min = int(t / 60)
@@ -35,7 +32,7 @@ def zip_code():
         zipf.write(source_file)
     zipf.close()
 
-def run_solution(func):
+def run_solution(func, local_only=False):
     zip_code()
 
     results = {}
@@ -55,9 +52,12 @@ def run_solution(func):
 
             elapsed = time.time() - start_time
             processing.write_output(output_filename, output_data)
-            submission_id = submit.submit_file(INPUT_FILENAMES[f], output_filename, SOURCE_CODE_FILENAME)
 
-            # TODO: Plug in evaluation function
+            submission_id = None
+            if not local_only:
+                submission_id = submit.submit_file(INPUT_FILENAMES[f], output_filename, SOURCE_CODE_FILENAME)
+
+            # TODO: Plug in local evaluation function
             score = 0
 
             results[f] = {
@@ -70,4 +70,7 @@ def run_solution(func):
         print('{:#^30}'.format(''))
         print('')
 
+    # TODO: Plug in submit.get_scores()
+
+    # TODO: Print results
     print(results)
