@@ -4,7 +4,7 @@ import os
 import utils
 
 def read(INPUT_FOLDER, file_name):
-    path = os.path.join('input', file_name)
+    path = os.path.join(INPUT_FOLDER, file_name)
     with open(path, 'r') as f:
         R, C, L, H = map(int, next(f).split())
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     INPUT_FOLDER = 'input'
     OUTPUT_FOLDER = 'output'
     utils.zip_code()
-    files = os.listdir(INPUT_FOLDER)
+    files = sorted(os.listdir(INPUT_FOLDER))
     for file in files:
         print(file)
         R, C, L, H, lines = read(INPUT_FOLDER, file)
