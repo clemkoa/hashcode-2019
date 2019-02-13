@@ -3,6 +3,10 @@ import urllib.parse
 
 from utils import common
 
+"""
+    Helper functions for submitting solutions on the Judge System.
+"""
+
 def get_headers():
     try:
         with open(common.TOKEN_FILE, 'r') as f:
