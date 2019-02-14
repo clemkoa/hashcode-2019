@@ -32,9 +32,41 @@ def read_input(filename):
         lines = np.array([parse_line(line) for line in f])
         return (R, C, L, H, lines)
 
-def write_output(filename, input_data):
+def evaluate(input_data, output_data):
     """
-        Example output writer for the 'Pizza' problem
+        Example output evaluation for the 'Pizza' problem.
+     """
+    R, C, L, H, lines = input_data
+
+    # Validate that all slices are valid
+    valid = True
+    score = 0
+    for rect in output_data:
+        r1, c1, r2, c2 = rect
+        slice = lines[r1:r2+1, c1:c2+1]
+        slice_tomato_count = slice.sum()
+        slice_mushroom_count = slice.size - slice_tomato_count
+        if slice.size > H:
+            valid = False
+            print("ERROR: Slice too big - {} is more than {} - ({}, {}, {}, {}): {}".format(slice.size, H, r1, c1, r2, c2, slice))
+        elif slice_tomato_count < L:
+            valid = False
+            print("ERROR: Slice without enough tomato - {} is less than {} - ({}, {}, {}, {}): {}".format(slice_tomato_count, L, r1, c1, r2, c2, slice))
+        elif slice_mushroom_count < L:
+            valid = False
+            print("ERROR: Slice without enough mushrooms - {} is less than {} - ({}, {}, {}, {}): {}".format(slice_mushroom_count, L, r1, c1, r2, c2, slice))
+        else:
+            score += slice.size
+
+    # Score is the sum of all cells in all slices
+    if valid:
+        score = sum([(abs(r[0] - r[2]) + 1) * (abs(r[1] - r[3]) + 1) for r in output_data])
+
+    return valid, score
+
+def write_output(filename, output_data):
+    """
+        Example output writer for the 'Pizza' problem.
         Input data is a list of slices, where each slice is a list of 4 elements:
         (starting row, starting column, ending row, ending column)
     """
@@ -43,7 +75,6 @@ def write_output(filename, input_data):
         os.mkdir(folder)
 
     with open(filename, 'w') as f:
-        f.write(str(len(input_data)) + '\n')
-        for rect in input_data:
-            print(rect)
+        f.write(str(len(output_data)) + '\n')
+        for rect in output_data:
             f.write(' '.join(map(str, rect)) + '\n')

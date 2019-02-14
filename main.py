@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 
 import utils
@@ -12,7 +13,7 @@ def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
     return False
 
 def my_solution(input_data):
-    (R, C, L, H, lines) = input_data
+    (R, C, L, H, lines) = copy.deepcopy(input_data)
     solution = []
     for i in range(R):
         for j in range(C):
@@ -22,4 +23,4 @@ def my_solution(input_data):
     return solution
 
 if __name__ == '__main__':
-    utils.run_solution(my_solution)
+    utils.run_solution(my_solution, local_only=True)

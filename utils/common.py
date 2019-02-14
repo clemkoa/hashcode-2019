@@ -29,6 +29,13 @@ def pretty_print_time(t):
     return ('{}min '.format(min) if min > 0 else '') \
         + '{:.2f}s'.format(sec)
 
+def clear_output():
+    """
+        Removes all files from the output folder.
+    """
+    for f in os.listdir(OUTPUT_FOLDER):
+        os.remove(os.path.join(OUTPUT_FOLDER, f))
+
 def zip_code():
     """
         Zips all Python files at the root level and subfolders for submission.
@@ -45,11 +52,12 @@ def run_solution(func, local_only=False):
         Use `local_only=True` to not submit to the Judge System.
     """
 
+    clear_output()
     zip_code()
 
     results = {}
     for f in processing.INPUT_FILENAMES:
-        print('{:#^30}'.format(f))
+        print('{:#^50}'.format(f))
 
         input_filename = os.path.join(INPUT_FOLDER, f)
         dataset_id = processing.INPUT_FILENAMES[f]
@@ -65,25 +73,48 @@ def run_solution(func, local_only=False):
 
             elapsed = time.time() - start_time
             processing.write_output(output_filename, output_data)
+            internal_valid, internal_score = processing.evaluate(input_data, output_data)
 
             submission_id = None
             if not local_only:
                 submission_id = submit.submit_file(dataset_id, output_filename, SOURCE_CODE_FILENAME)
 
-            # TODO: Plug in local evaluation function
-            score = 0
+
+            # TODO(pmustiere): Remove
+            if f == 'a_example.in':
+                internal_valid = False
+                internal_score = 0
 
             results[f] = {
                 'submission_id': submission_id,
-                'internal_score': score,
+                'internal_valid': internal_valid,
+                'internal_score': internal_score,
                 'elapsed': elapsed
             }
 
-            print('Took {} and scored {}'.format(pretty_print_time(elapsed), score))
-        print('{:#^30}'.format(''))
+            print('Took {} and scored {}'.format(pretty_print_time(elapsed), internal_score))
+        print('{:#^50}'.format(''))
         print('')
 
     # TODO: Plug in submit.get_scores()
 
-    # TODO: Print results
-    print(results)
+    print('')
+    print('{:#^50}'.format('RESULTS'))
+    print('{:#^50}'.format(''))
+    print('')
+
+    for f in sorted(results.keys()):
+        r = results[f]
+        print('{:#^50}'.format(f))
+
+        if not r['internal_valid']:
+            print('Local evaluation shown invalid solution')
+        else:
+            print('Local evaluation: {} in {}'.format(r['internal_score'], pretty_print_time(r['elapsed'])))
+        # TODO: Show Judge system evaluation
+
+        print('')
+
+    print('')
+    print('{:#^50}'.format(''))
+    print('{:#^50}'.format(''))
