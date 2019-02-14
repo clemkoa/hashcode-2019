@@ -27,6 +27,7 @@ def read_input(filename):
         R, C, L, H = map(int, next(f).split())
 
         def parse_line(line):
+            line = line.replace('\n', '')
             return [0 if c is 'M' else 1 for c in line]
 
         lines = np.array([parse_line(line) for line in f])
