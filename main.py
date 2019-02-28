@@ -34,18 +34,22 @@ def pair_score(photo1, photo2, lines):
     return min(num_inter, num_1_minus_2, num_2_minus_1)
 
 def construct_results(photos, lines):
-    results = []
-    while len(photos) > 1:
-        element = photos.pop()
+    element = photos.pop()
+    results = [element]
+    while len(photos) > 0:
         index = find_index_best_pair(element, photos, lines)
-        results += [element, photos[index]]
+        results.append(photos[index])
+        element = copy.copy(photos[index])
         del photos[index]
     return results
 
 def find_index_best_pair(photo, photos, lines):
-    lim = 50
+    lim = 100
     if len(photos) < lim:
         return 0
+    for i in range(lim):
+        if pair_score(photo, photos[i], lines) > 2:
+            return i
     for i in range(lim):
         if pair_score(photo, photos[i], lines) > 0:
             return i
@@ -68,7 +72,7 @@ def sort_verticals(verticals):
         couple = verticals[index][0]
         couples.append([element[0], couple])
         del verticals[index]
-
+    print('verticals done')
     return couples
 
 def paul_solution(input_data):

@@ -67,7 +67,7 @@ def get_transitions_scores(input_data, output_data):
         num_1_minus_2 = len(keywords1.difference(keywords2))
         num_2_minus_1 = len(keywords2.difference(keywords1))
         transition_scores.append(min(num_inter, num_1_minus_2, num_2_minus_1))
-
+    # print(transition_scores)
     return transition_scores
 
 def score_pair(t1, t2):
