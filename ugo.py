@@ -1,13 +1,64 @@
+import copy
 import numpy as np
-import tensorflow as tf
+from random import shuffle
+import utils
+from scipy.stats import describe
+
+from main import sort_verticals
+
+def get_scores(input_data, solution):
+    transitions_scores = np.array(utils.processing.get_transitions_scores(input_data, solution))
+
+    photo_scores = transitions_scores[1:] + transitions_scores[:-1]
+    photo_scores = np.insert(photo_scores, 0, transitions_scores[0])
+    photo_scores = np.insert(photo_scores, -1, transitions_scores[-1])
+
+    return photo_scores, transitions_scores
+
+def better_solution(input_data, solution, iter):
+    photo_scores, transitions_scores = get_scores(input_data, solution)
+    photos = np.arange(len(solution))
+    stats = describe(photo_scores)
+    zero_ids = np.where(photo_scores <= stats.mean + 0.1/(iter+1) * stats.variance)[0]
+    photos[zero_ids] = np.random.permutation(photos[zero_ids])
+
+    return [solution[photos[i]] for i in photos]
+
+def print_metrics(input_data, solution):
+    photo_scores, transitions_scores = get_scores(input_data, solution)
+    score = sum(transitions_scores)
+    num_zeros = np.where(transitions_scores == 0)[0].shape[0]
+    print('{:#^10}'.format(''))
+    print('Transition score: {}'.format(score))
+    print('Transition describe: {}'.format(describe(transitions_scores)))
+    print('Transition that score 0: {}'.format(num_zeros))
+    print('Photo describe: {}'.format(describe(photo_scores)))
+
+def paul_solution(input_data):
+    (N, photos) = copy.deepcopy(input_data)
+    solution = [[i] for i in range(len(photos)) if photos[i][0] == 0]
+    V_photos = [[i, photos[i][1]] for i in range(len(photos)) if photos[i][0] == 1]
+    V_photos = sort_verticals(V_photos)
+
+    H_photos = [[i] for i in range(len(photos)) if photos[i][0] == 0]
+
+    solution = H_photos + V_photos
 
 
-def cardinality_intersection_of_tags(set1, set2):
-    return len(set1.intersection(set2))
+    print_metrics(input_data, solution)
 
-def cardinality_s1_minus_s2(set1, set2):
-    return len(set1.difference(set2))
+    for iter in range(100):
 
-def cardinality_s2_minus_s1(set1, set2):
-    return len(set2.difference(set1))
-    
+        solution = better_solution(input_data, solution, iter)
+        if iter%10 == 0:
+            transitions_scores = utils.processing.get_transitions_scores(input_data, solution)
+            score = sum(transitions_scores)
+            num_zeros = np.where(transitions_scores == 0)[0].shape[0]
+            print_metrics(input_data, solution)
+
+    print_metrics(input_data, solution)
+
+    return solution
+
+if __name__ == '__main__':
+    utils.run_solution(paul_solution)
