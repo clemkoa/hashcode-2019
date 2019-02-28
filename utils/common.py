@@ -34,7 +34,8 @@ def clear_output():
         Removes all files from the output folder.
     """
     for f in os.listdir(OUTPUT_FOLDER):
-        os.remove(os.path.join(OUTPUT_FOLDER, f))
+        if f != '.gitkeep':
+            os.remove(os.path.join(OUTPUT_FOLDER, f))
 
 def zip_code():
     """
