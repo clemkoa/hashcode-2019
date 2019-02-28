@@ -10,11 +10,11 @@ PROBLEM_ID = '6417837228818432'
 
 # List of problem-specific input filenames, and associated dataset ID
 INPUT_FILENAMES = {
-    'a_example.txt': '6199627120377856',
+    # 'a_example.txt': '6199627120377856',
     'b_lovely_landscapes.txt': '5239399268745216',
-    'c_memorable_moments.txt': '5185683152961536',
-    'd_pet_pictures.txt': '6378347655331840',
-    'e_shiny_selfies.txt': '4834468208574464',
+    # 'c_memorable_moments.txt': '5185683152961536',
+    # 'd_pet_pictures.txt': '6378347655331840',
+    # 'e_shiny_selfies.txt': '4834468208574464',
 }
 
 def transform_strings(photos):
