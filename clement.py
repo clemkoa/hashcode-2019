@@ -69,12 +69,16 @@ def my_solution(input_data):
             if next_slide in friends[i]:
                 friends[i].remove(next_slide)
 
-    with open('save.out', 'w') as f:
+    final = [slides[i] for i in path]
+
+    with open('path.out', 'w') as f:
+        dump(path, f)
+    with open('final.out', 'w') as f:
         dump(path, f)
 
     print('Final: ' + str(len(path)))
 
-    return [slides[i] for i in path]
+    return final
 
     # print(slides)
     # print(tags)
