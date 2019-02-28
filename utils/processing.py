@@ -57,8 +57,14 @@ def evaluate(input_data, output_data):
 
     transition_scores = []
     for i in range(len(slides) - 1):
-        keywords1 = photos[i][1]
-        keywords2 = photos[i+1][1]
+        photos1 = slides[i]
+        keywords1 = set()
+        for p in photos1:
+            keywords1 |= photos[p][1]
+        photos2 = slides[i+1]
+        keywords2 = set()
+        for p in photos2:
+            keywords2 |= photos[p][1]
 
         num_inter = len(keywords1.intersection(keywords2))
         num_1_minus_2 = len(keywords1.difference(keywords2))
