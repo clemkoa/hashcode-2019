@@ -48,10 +48,7 @@ def read_input(filename):
         photos = transform_strings([parse_line(line) for line in f])
         return (len(photos), photos)
 
-def evaluate(input_data, output_data):
-    """
-        Example output evaluation for the 'Slideshow' problem.
-     """
+def get_transitions_scores(input_data, output_data):
     N, photos = input_data
     slides = output_data
 
@@ -70,6 +67,14 @@ def evaluate(input_data, output_data):
         num_1_minus_2 = len(keywords1.difference(keywords2))
         num_2_minus_1 = len(keywords2.difference(keywords1))
         transition_scores.append(min(num_inter, num_1_minus_2, num_2_minus_1))
+
+    return transition_scores
+
+def evaluate(input_data, output_data):
+    """
+        Example output evaluation for the 'Slideshow' problem.
+     """
+    transition_scores = get_transitions_scores(input_data, output_data)
 
     return True, sum(transition_scores)
 
