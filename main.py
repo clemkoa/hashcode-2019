@@ -13,14 +13,9 @@ def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
     return False
 
 def my_solution(input_data):
-    (R, C, L, H, lines) = copy.deepcopy(input_data)
+    (N, lines) = copy.deepcopy(input_data)
     solution = []
-    for i in range(R):
-        for j in range(C):
-            if is_slice_valid(lines, i, j, i + H - 1, j, R, C, L, H):
-                solution.append([i, j, i + H - 1, j])
-                lines[i:i+H, j:j+1] = 2
-    return solution
+    return [[str(i)] for i in range(len(lines)) if lines[i][0] == 0]
 
 if __name__ == '__main__':
-    utils.run_solution(my_solution, local_only=True)
+    utils.run_solution(my_solution)
