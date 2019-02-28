@@ -24,7 +24,8 @@ def update_tags(slides, photos):
 
 def score_pair(t1, t2):
     inter = t1.intersection(t2)
-    return min(len(inter), len(t1.difference(inter)), len(t2.difference(inter)))
+
+    return min(len(inter), len(t1) - len(inter), len(t2) - len(inter))
 
 def compute_friends(tags, reverse):
     return [set(r for t in tag for r in reverse[t]) for tag in tags]
@@ -85,5 +86,39 @@ def my_solution(input_data):
 
     return final
 
+def my_solution2(input_data):
+    (N, photos) = copy.deepcopy(input_data)
+
+    threshold = 4
+
+    path = [[0, 1]]
+    path_set = set([0, 1])
+    all_slides = set(range(len(photos)))
+    total = 0
+    for a in range(len(photos) // 2 - 1):
+        left = path[-1][1]
+        tags_left = photos[left][1]
+        right = None
+        for i in range(len(photos)):
+            if i % 40 != 0 or i in path_set: continue
+
+            tags_i = photos[i][1]
+            score = score_pair(tags_left, tags_i)
+            if score > threshold:
+                right = i
+                break
+        if right is None:
+            right = sample(all_slides.difference(path_set), 1)[0]
+        score = score_pair(tags_left, photos[right][1])
+        total += score
+        print(a, total, score)
+        path_set.add(right)
+        left = sample(all_slides.difference(path_set), 1)[0]
+        path.append([right, left])
+        path_set.add(left)
+    return path
+
+
 if __name__ == '__main__':
-    utils.run_solution(my_solution)
+    # utils.run_solution(my_solution)
+    utils.run_solution(my_solution2)
