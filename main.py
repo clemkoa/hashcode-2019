@@ -1,6 +1,5 @@
 import copy
-import numpy as np
-
+import numpy as np  
 import utils
 
 def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
@@ -22,5 +21,8 @@ def my_solution(input_data):
                 lines[i:i+H, j:j+1] = 2
     return solution
 
+
+
 if __name__ == '__main__':
     utils.run_solution(my_solution, local_only=True)
+    
