@@ -40,5 +40,18 @@ def sort_verticals(verticals):
 
     return couples
 
+def paul_solution(input_data):
+    (N, photos) = copy.deepcopy(input_data)
+    solution = [[i] for i in range(len(photos)) if photos[i][0] == 0]
+
+    V_photos = [i for i in range(len(photos)) if photos[i][0] == 1]
+    V_photos = [[V_photos[2*i], V_photos[2*i+1]] for i in range(int(len(V_photos)/2))] # merge
+    H_photos = [[i] for i in range(len(photos)) if photos[i][0] == 0]
+
+    solution = H_photos + V_photos
+    transitions_scores = utils.processing.get_transitions_scores(input_data, solution)
+
+    return solution
+
 if __name__ == '__main__':
     utils.run_solution(my_solution)
