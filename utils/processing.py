@@ -10,10 +10,7 @@ PROBLEM_ID = '5720363694555136'
 
 # List of problem-specific input filenames, and associated dataset ID
 INPUT_FILENAMES = {
-    'a_example.in': '6140197687263232',
-    'b_small.in': '6571563717492736',
-    'c_medium.in': '5024167346831360',
-    'd_big.in': '6561530623557632'
+    'a_example.txt': '6140197687263232',
 }
 
 def read_input(filename):
@@ -27,20 +24,22 @@ def read_input(filename):
             lines:  np.array of the input, where mushrooms are zeros and tomatoes ones
     """
     with open(filename, 'r') as f:
-        R, C, L, H = map(int, next(f).split())
+        N = map(int, next(f).split())
 
         def parse_line(line):
-            line = line.replace('\n', '')
-            return [0 if c is 'M' else 1 for c in line]
+            l = line.split()
+            h = 0 if l[0] == 'H' else 1
+            n = int(l[1])
+            return [h, l[2:]]
 
-        lines = np.array([parse_line(line) for line in f])
-        return (R, C, L, H, lines)
+        lines = [parse_line(line) for line in f]
+        return (N, lines)
 
 def evaluate(input_data, output_data):
     """
         Example output evaluation for the 'Pizza' problem.
      """
-    R, C, L, H, lines = input_data
+    N, lines = input_data
 
     # Validate that all slices are valid
     valid = True
