@@ -28,7 +28,6 @@ def read_input(filename):
     """
     with open(filename, 'r') as f:
         (N) = map(int, next(f).split())
-
         def parse_line(line):
             l = line.split()
             h = 0 if l[0] == 'H' else 1
@@ -36,6 +35,16 @@ def read_input(filename):
             return [h, l[2:]]
 
         photos = [parse_line(line) for line in f]
+        seen = []
+        for line in photos:
+            seen = seen + line[1]
+
+        seen = list(set(seen))
+        # d = dict(enumerate(seen))
+        inverse_d = {x:i for i,x in enumerate(seen)}
+        for line in photos:
+            line[1] = set([inverse_d[l] for l in line[1]])
+
         return (len(photos), photos)
 
 def evaluate(input_data, output_data):
