@@ -70,6 +70,10 @@ def get_transitions_scores(input_data, output_data):
 
     return transition_scores
 
+def score_pair(t1, t2):
+    inter = t1.intersection(t2)
+    return min(len(inter), len(t1.difference(inter)), len(t2.difference(inter)))
+
 def evaluate(input_data, output_data):
     """
         Example output evaluation for the 'Slideshow' problem.
