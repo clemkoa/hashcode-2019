@@ -17,6 +17,19 @@ INPUT_FILENAMES = {
     'e_shiny_selfies.txt': '4834468208574464',
 }
 
+def transform_strings(photos):
+    seen = []
+    for line in photos:
+        seen = seen + line[1]
+
+    seen = list(set(seen))
+    # d = dict(enumerate(seen))
+    inverse_d = {x:i for i,x in enumerate(seen)}
+    for line in photos:
+        line[1] = set([inverse_d[l] for l in line[1]])
+
+    return photos
+
 def read_input(filename):
     """
         Example input reader for the 'Slideshow' problem.
@@ -34,17 +47,7 @@ def read_input(filename):
             n = int(l[1])
             return [h, l[2:]]
 
-        photos = [parse_line(line) for line in f]
-        seen = []
-        for line in photos:
-            seen = seen + line[1]
-
-        seen = list(set(seen))
-        # d = dict(enumerate(seen))
-        inverse_d = {x:i for i,x in enumerate(seen)}
-        for line in photos:
-            line[1] = set([inverse_d[l] for l in line[1]])
-
+        photos = transform_strings([parse_line(line) for line in f])
         return (len(photos), photos)
 
 def evaluate(input_data, output_data):
