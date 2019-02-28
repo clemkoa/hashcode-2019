@@ -27,7 +27,7 @@ def read_input(filename):
                 - a list of words
     """
     with open(filename, 'r') as f:
-        N = map(int, next(f).split())
+        (N) = map(int, next(f).split())
 
         def parse_line(line):
             l = line.split()
@@ -36,7 +36,7 @@ def read_input(filename):
             return [h, l[2:]]
 
         photos = [parse_line(line) for line in f]
-        return (N, photos)
+        return (len(photos), photos)
 
 def evaluate(input_data, output_data):
     """
