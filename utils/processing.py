@@ -6,14 +6,15 @@ import numpy as np
 """
 
 # Problem-specific ID
-PROBLEM_ID = '5720363694555136'
+PROBLEM_ID = '6417837228818432'
 
 # List of problem-specific input filenames, and associated dataset ID
 INPUT_FILENAMES = {
-    'a_example.in': '6140197687263232',
-    'b_small.in': '6571563717492736',
-    'c_medium.in': '5024167346831360',
-    'd_big.in': '6561530623557632'
+    'a_example.txt': '6199627120377856',
+    'b_lovely_landscapes.txt': '5239399268745216',
+    'c_memorable_moments.txt': '5185683152961536',
+    'd_pet_pictures.txt': '6378347655331840',
+    'e_shiny_selfies.txt': '4834468208574464',
 }
 
 def read_input(filename):
