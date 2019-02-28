@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pickle
 
 """
     Contains problem-specific logic for reading the input and writing the output
@@ -11,10 +12,10 @@ PROBLEM_ID = '6417837228818432'
 # List of problem-specific input filenames, and associated dataset ID
 INPUT_FILENAMES = {
     'a_example.txt': '6199627120377856',
-    'b_lovely_landscapes.txt': '5239399268745216',
     'c_memorable_moments.txt': '5185683152961536',
     'd_pet_pictures.txt': '6378347655331840',
     'e_shiny_selfies.txt': '4834468208574464',
+    'b_lovely_landscapes.txt': '5239399268745216',
 }
 
 def transform_strings(photos):
@@ -87,9 +88,12 @@ def write_output(filename, output_data):
         Example output writer for the 'Slideshow' problem.
         Input data is a list of slide, where each slide is a list of photos.
     """
+
     folder = os.path.dirname(filename)
     if not os.path.exists(folder):
         os.mkdir(folder)
+
+    pickle.dump(output_data, open(filename + '.pickle', 'wb'))
 
     with open(filename, 'w') as f:
         f.write(str(len(output_data)) + '\n')
