@@ -15,9 +15,9 @@ def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
 def my_solution(input_data):
     (N, lines) = copy.deepcopy(input_data)
     solution = []
-    verticals = [l for l in lines if l[0] == 1]
+    verticals = [[i, lines[i][1]] for i in range(len(lines)) if lines[i][0] == 1]
     verticals = sort_verticals(verticals)
-    result = [[i] for i in range(len(lines)) if lines[i][0] == 0] + verticals[:-1]
+    result = [[i] for i in range(len(lines)) if lines[i][0] == 0] + verticals
     return result
 
 def find_index_best(tags, verticals):
@@ -34,8 +34,8 @@ def sort_verticals(verticals):
     while len(verticals):
         element = verticals.pop()
         index = find_index_best(element[1], verticals)
-        couple = verticals[index]
-        couples.append([element, couple])
+        couple = verticals[index][0]
+        couples.append([element[0], couple])
         del verticals[index]
 
     return couples
