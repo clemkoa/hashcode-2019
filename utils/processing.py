@@ -50,11 +50,22 @@ def read_input(filename):
 
 def evaluate(input_data, output_data):
     """
-        Example output evaluation for the 'Pizza' problem.
+        Example output evaluation for the 'Slideshow' problem.
      """
-    N, lines = input_data
+    N, photos = input_data
+    slides = output_data
 
-    return True, 0
+    transition_scores = []
+    for i in range(len(slides) - 1):
+        keywords1 = photos[i][1]
+        keywords2 = photos[i+1][1]
+
+        num_inter = len(keywords1.intersection(keywords2))
+        num_1_minus_2 = len(keywords1.difference(keywords2))
+        num_2_minus_1 = len(keywords2.difference(keywords1))
+        transition_scores.append(min(num_inter, num_1_minus_2, num_2_minus_1))
+
+    return True, sum(transition_scores)
 
 def write_output(filename, output_data):
     """
