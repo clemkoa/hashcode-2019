@@ -5,6 +5,9 @@ import numpy as np
     Contains problem-specific logic for reading the input and writing the output
 """
 
+# Problem-specific ID
+PROBLEM_ID = '5720363694555136'
+
 # List of problem-specific input filenames, and associated dataset ID
 INPUT_FILENAMES = {
     'a_example.in': '6140197687263232',

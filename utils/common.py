@@ -97,6 +97,8 @@ def run_solution(func, local_only=False):
         print('')
 
     # TODO: Plug in submit.get_scores()
+    if not local_only:
+        get_scores(processing.PROBLEM_ID, [r.submission_id for r in results.values()])
 
     print('')
     print('{:#^50}'.format('RESULTS'))
