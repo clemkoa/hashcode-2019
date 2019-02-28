@@ -58,4 +58,4 @@ def write_output(filename, output_data):
     with open(filename, 'w') as f:
         f.write(str(len(output_data)) + '\n')
         for slide in output_data:
-            f.write(' '.join(slide) + '\n')
+            f.write(' '.join(map(str, slide)) + '\n')
