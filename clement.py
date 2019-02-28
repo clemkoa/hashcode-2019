@@ -53,7 +53,7 @@ def my_solution(input_data):
         current = path[-1]
         scores = [(score_pair(tags[current], tags[f]), f) for f in friends[current]]
         if len(scores) == 0:
-            next_slide = sample(path_set.intersection(all_slides), 1)[0]
+            next_slide = sample(all_slides.difference(path_set), 1)[0]
             score = 0
         else:
             (score, next_slide) = max(scores)
@@ -69,6 +69,11 @@ def my_solution(input_data):
             if next_slide in friends[i]:
                 friends[i].remove(next_slide)
 
+    with open('path.out', 'w') as f:
+        dump(path, f)
+    with open('slides.out', 'w') as f:
+        dump(slides, f)
+
     final = [slides[i] for i in path]
 
     with open('path.out', 'w') as f:
@@ -76,16 +81,9 @@ def my_solution(input_data):
     with open('final.out', 'w') as f:
         dump(path, f)
 
-    print('Final: ' + str(len(path)))
+    # print('Final: ' + str(len(path)))
 
     return final
-
-    # print(slides)
-    # print(tags)
-    # print(dict(reverse))
-    # print(friends)
-
-    return slides
 
 if __name__ == '__main__':
     utils.run_solution(my_solution)
