@@ -58,15 +58,15 @@ def submit_file(dataset_id, solution_filename, source_filename):
 
 def get_scores(problem_id, submission_ids):
     response = requests.get('https://hashcode-judge.appspot.com/api/judge/v1/submissions/{}'.format(problem_id), headers=get_headers()).json()
-    print(response['items'])
+    scores = {} # submission_id -> (scored, valid, score)
     for item in response['items']:
         if item['id'] in submission_ids:
             if not item['scored']:
-                print('Solution for "{}" still not scored'.format(item['dataSet']['name']))
+                scores[item['id']] = (False, False, 0)
             else:
                 if item['valid']:
-                    print('Solution for "{}" got {}{}'.format(item['dataSet']['name'], item['score'], ' - new record!' if item['best'] else ''))
+                    scores[item['id']] = (True, True, item['score'])
                 else:
-                    print('Solution for "{}" not valid: {}'.format(item['dataSet']['name'], item['errorMessage']))
+                    scores[item['id']] = scores[item['id']] = (True, False, 0)
 
-            print('')
+    return scores

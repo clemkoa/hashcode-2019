@@ -97,9 +97,12 @@ def run_solution(func, local_only=False):
         print('{:#^50}'.format(''))
         print('')
 
-    # TODO: Plug in submit.get_scores()
     if not local_only:
-        get_scores(processing.PROBLEM_ID, [r.submission_id for r in results.values()])
+        remote_answers = submit.get_scores(processing.PROBLEM_ID, [r['submission_id'] for r in results.values()])
+        for f in results.keys():
+            results[f]['remote_scored'] = remote_answers[results[f]['submission_id']][0]
+            results[f]['remote_valid'] = remote_answers[results[f]['submission_id']][1]
+            results[f]['remote_score'] = remote_answers[results[f]['submission_id']][2]
 
     print('')
     print('{:#^50}'.format('RESULTS'))
@@ -114,7 +117,17 @@ def run_solution(func, local_only=False):
             print('Local evaluation shown invalid solution')
         else:
             print('Local evaluation: {} in {}'.format(r['internal_score'], pretty_print_time(r['elapsed'])))
-        # TODO: Show Judge system evaluation
+
+
+        if not local_only:
+            if not r['remote_scored']:
+                print('Remote evaluation not scored yet')
+            else:
+                if r['remote_valid']:
+                    print('Remote evaluation: {}'.format(r['remote_score']))
+                else:
+                    print('Remote evaluation shown invalid solution')
+
 
         print('')
 
