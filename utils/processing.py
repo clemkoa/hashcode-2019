@@ -18,12 +18,10 @@ INPUT_FILENAMES = {
 }
 
 def transform_strings(photos):
-    seen = []
+    seen = set()
     for line in photos:
-        seen = seen + line[1]
+        seen |= set(line[1])
 
-    seen = list(set(seen))
-    # d = dict(enumerate(seen))
     inverse_d = {x:i for i,x in enumerate(seen)}
     for line in photos:
         line[1] = set([inverse_d[l] for l in line[1]])
