@@ -4,7 +4,7 @@ from random import shuffle
 import utils
 from scipy.stats import describe
 
-from main import sort_verticals
+from main import my_solution
 
 def get_scores(input_data, solution):
     transitions_scores = np.array(utils.processing.get_transitions_scores(input_data, solution))
@@ -19,7 +19,10 @@ def better_solution(input_data, solution, iter):
     photo_scores, transitions_scores = get_scores(input_data, solution)
     photos = np.arange(len(solution))
     stats = describe(photo_scores)
-    zero_ids = np.where(photo_scores <= stats.mean + 0.1/(iter+1) * stats.variance)[0]
+    threshold = stats.mean#min(stats.mean, stats.mean * (iter / 100))
+    if iter%10 == 0:
+        print('thres: {}'.format(threshold))
+    zero_ids = np.where(photo_scores <= threshold)[0]
     photos[zero_ids] = np.random.permutation(photos[zero_ids])
 
     return [solution[photos[i]] for i in photos]
@@ -36,13 +39,8 @@ def print_metrics(input_data, solution):
 
 def paul_solution(input_data):
     (N, photos) = copy.deepcopy(input_data)
-    solution = [[i] for i in range(len(photos)) if photos[i][0] == 0]
-    V_photos = [[i, photos[i][1]] for i in range(len(photos)) if photos[i][0] == 1]
-    V_photos = sort_verticals(V_photos)
-
-    H_photos = [[i] for i in range(len(photos)) if photos[i][0] == 0]
-
-    solution = H_photos + V_photos
+    solution = my_solution(input_data)
+    print('Jood done')
 
 
     print_metrics(input_data, solution)
