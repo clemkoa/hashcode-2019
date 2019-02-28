@@ -3,6 +3,7 @@ import numpy as np
 from random import shuffle
 import utils
 from scipy.stats import describe
+import pickle
 
 from main import my_solution
 
@@ -15,11 +16,12 @@ def get_scores(input_data, solution):
 
     return photo_scores, transitions_scores
 
+
 def better_solution(input_data, solution, iter):
     photo_scores, transitions_scores = get_scores(input_data, solution)
     photos = np.arange(len(solution))
     stats = describe(photo_scores)
-    threshold = stats.mean#min(stats.mean, stats.mean * (iter / 100))
+    threshold = stats.mean-2
     if iter%10 == 0:
         print('thres: {}'.format(threshold))
     zero_ids = np.where(photo_scores <= threshold)[0]
@@ -38,10 +40,19 @@ def print_metrics(input_data, solution):
     print('Photo describe: {}'.format(describe(photo_scores)))
 
 def paul_solution(input_data):
-    (N, photos) = copy.deepcopy(input_data)
-    solution = my_solution(input_data)
-    print('Jood done')
+    with open('temp_d.pkl', 'rb') as f:
+          solution = pickle.load(f)
 
+    print_metrics(input_data, solution)
+
+    photo_scores, transitions_scores = get_scores(input_data, solution)
+    stats = describe(photo_scores)
+    good_photos = np.where(photo_scores > stats.mean-2)[0]
+    bad_photos = np.where(photo_scores <= stats.mean-2)[0]
+    print(bad_photos.shape[0])
+
+    photos = np.concatenate((good_photos, bad_photos))
+    solution = [solution[photos[i]] for i in photos]
     print_metrics(input_data, solution)
 
     for iter in range(100):
