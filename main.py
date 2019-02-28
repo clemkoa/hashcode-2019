@@ -15,7 +15,7 @@ def is_slice_valid(pizza, xmin, ymin, xmax, ymax, R, C, L, H):
 def my_solution(input_data):
     (N, lines) = copy.deepcopy(input_data)
     solution = []
-    return [[str(i)] for i in range(len(lines)) if lines[i][0] == 0]
+    return [[i] for i in range(len(lines)) if lines[i][0] == 0]
 
 if __name__ == '__main__':
     utils.run_solution(my_solution)
