@@ -1,4 +1,5 @@
 import copy
+import pickle
 import numpy as np
 from random import shuffle
 import utils
@@ -18,7 +19,9 @@ def my_solution(input_data):
     verticals = [[i, lines[i][1]] for i in range(len(lines)) if lines[i][0] == 1]
     verticals = sort_verticals(verticals)
     a = [[i] for i in range(len(lines)) if lines[i][0] == 0] + verticals
-    return construct_results(a, lines)
+    a.sort(key=lambda x: sum(list(map(lambda y: len(lines[y][1]), x))), reverse=True)
+    res = construct_results(a, lines)
+    return res
 
 def get_keywords(photo, lines):
     if len(photo) == 2:
@@ -37,6 +40,7 @@ def construct_results(photos, lines):
     element = photos.pop()
     results = [element]
     while len(photos) > 0:
+        print(len(photos))
         index = find_index_best_pair(element, photos, lines)
         results.append(photos[index])
         element = copy.copy(photos[index])
@@ -44,15 +48,11 @@ def construct_results(photos, lines):
     return results
 
 def find_index_best_pair(photo, photos, lines):
-    lim = 100
-    if len(photos) < lim:
-        return 0
-    for i in range(lim):
-        if pair_score(photo, photos[i], lines) > 2:
-            return i
-    for i in range(lim):
-        if pair_score(photo, photos[i], lines) > 0:
-            return i
+    lim = 20
+    for m in range(len(get_keywords(photo, lines)), 0, -1):
+        for i in range(min(len(photos), lim)):
+            if pair_score(photo, photos[i], lines) > m:
+                return i
     return 0
 
 def find_index_best(tags, verticals):
