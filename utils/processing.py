@@ -19,13 +19,12 @@ INPUT_FILENAMES = {
 
 def read_input(filename):
     """
-        Example input reader for the 'Pizza' problem.
+        Example input reader for the 'Slideshow' problem.
         Returns a tuple of:
-            R:      Number of rows in the input
-            C:      Number of columns in the input
-            L:      Minimum number of each ingredient in a slice
-            H:      Maximum number of cells in a slice
-            lines:  np.array of the input, where mushrooms are zeros and tomatoes ones
+            N:      Number of photos
+            photos: list of Photo, where a Photo is:
+                - 0 for horizontal, 1 for vertical
+                - a list of words
     """
     with open(filename, 'r') as f:
         N = map(int, next(f).split())
@@ -36,8 +35,8 @@ def read_input(filename):
             n = int(l[1])
             return [h, l[2:]]
 
-        lines = [parse_line(line) for line in f]
-        return (N, lines)
+        photos = [parse_line(line) for line in f]
+        return (N, photos)
 
 def evaluate(input_data, output_data):
     """
@@ -73,9 +72,8 @@ def evaluate(input_data, output_data):
 
 def write_output(filename, output_data):
     """
-        Example output writer for the 'Pizza' problem.
-        Input data is a list of slices, where each slice is a list of 4 elements:
-        (starting row, starting column, ending row, ending column)
+        Example output writer for the 'Slideshow' problem.
+        Input data is a list of slide, where each slide is a list of photos.
     """
     folder = os.path.dirname(filename)
     if not os.path.exists(folder):
@@ -83,5 +81,5 @@ def write_output(filename, output_data):
 
     with open(filename, 'w') as f:
         f.write(str(len(output_data)) + '\n')
-        for rect in output_data:
-            f.write(' '.join(map(str, rect)) + '\n')
+        for slide in output_data:
+            f.write(' '.join(slide) + '\n')
